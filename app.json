@@ -12,7 +12,8 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.bboruta.stripern"
     },
     "android": {
       "adaptiveIcon": {
@@ -23,5 +24,14 @@
     "web": {
       "favicon": "./assets/favicon.png"
     }
-  }
+  },
+  "plugins": [
+    [
+      "@stripe/stripe-react-native",
+      {
+        "merchantIdentifier": "merchant.identifier.stripern",
+        "enableGooglePay": true
+      }
+    ]
+  ]
 }
