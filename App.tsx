@@ -1,9 +1,11 @@
-import { Button, StyleSheet, Text, View } from "react-native";
+import { Button, StyleSheet, LogBox, View } from "react-native";
 import { StripeProvider, useStripe } from "@stripe/stripe-react-native";
 import { IntentConfiguration } from "@stripe/stripe-react-native/lib/typescript/src/types/PaymentSheet";
 
+LogBox.ignoreAllLogs();
+
 const API_URL = "http://localhost:3000";
-const PUBLISHABLE_KEY = "YOUR_KEY_HERE";
+const PUBLISHABLE_KEY = "YOUR PUBLISHABLE KEY HERE";
 
 export default function App() {
   return (
@@ -30,6 +32,9 @@ const CheckoutScreen = () => {
       headers: {
         "Content-Type": "application/json",
       },
+      body: JSON.stringify({
+        id: paymentMethod.id,
+      }),
     });
     // Call the `intentCreationCallback` with your server response's client secret or error
     const { client_secret, error } = await response.json();
@@ -39,7 +44,13 @@ const CheckoutScreen = () => {
     if (client_secret) {
       intentCreationCallback({ clientSecret: client_secret });
     } else {
-      intentCreationCallback(error);
+      intentCreationCallback({
+        error: {
+          code: "Failed",
+          message: error?.message,
+          localizedMessage: error?.message,
+        },
+      });
     }
   };
 
